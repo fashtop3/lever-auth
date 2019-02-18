@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request, jsonify, current_app
+from flask import request, jsonify
 
 from .lever_jwt import jwt_decode_auth_token
 
@@ -15,10 +15,7 @@ def authenticate(f):
         if not auth_header:
             return jsonify(response_object), 403
         auth_token = auth_header.split(" ")[1]
-        resp = jwt_decode_auth_token(
-            auth_token,
-            current_app.config.get('PUBLIC_KEY')
-        )
+        resp = jwt_decode_auth_token(auth_token)
         if isinstance(resp, str):
             response_object['message'] = resp
             return jsonify(response_object), 401
