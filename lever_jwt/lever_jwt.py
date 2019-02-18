@@ -3,7 +3,7 @@ import jwt
 from flask import current_app
 
 
-def jwt_encode_auth_token(data, private_key):
+def jwt_encode_auth_token(data):
     """Generates the auth token"""
     try:
         payload = {
@@ -15,20 +15,22 @@ def jwt_encode_auth_token(data, private_key):
             'iat': datetime.datetime.utcnow(),
             'sub': data
         }
-        encoded = jwt.encode(payload, private_key, algorithm='RS256')
+        encoded = jwt.encode(payload,
+                             current_app.config.get('JWT_PRIVATE_KEY'),
+                             algorithm='RS256')
         return encoded
     except Exception as e:
         return e
 
 
-def jwt_decode_auth_token(auth_token, public_key):
+def jwt_decode_auth_token(auth_token):
     """
     Decodes the auth token - :param auth_token: - :return: integer|string
     """
     try:
         payload = jwt.decode(
             auth_token,
-            public_key,
+            current_app.config.get('JWT_PUBLIC_KEY'),
             issuer=current_app.config.get('JWT_TOKEN_ISSUER'),
             algorithms='RS256'
         )
