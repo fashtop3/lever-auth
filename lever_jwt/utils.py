@@ -5,7 +5,13 @@ from flask import request, jsonify
 from .lever_jwt import jwt_decode_auth_token
 
 
-def authenticate(f, session=None):
+def authenticate(f, redis=None):
+    """
+
+    :param f:
+    :param redis: a reference to redis db
+    :return:
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         response_object = {
@@ -20,8 +26,8 @@ def authenticate(f, session=None):
         if isinstance(resp, str):
             response_object['message'] = resp
             return jsonify(response_object), 403
-        if session:
-            session_data = json.loads(session.get(resp.get('id')))
+        if redis:
+            session_data = json.loads(redis.get(resp.get('id')))
             if session_data is None:
                 response_object["message"] = "Authentication invalid"
                 return jsonify(response_object), 401
