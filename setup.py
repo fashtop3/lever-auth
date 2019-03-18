@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='lever-jwt',
-    version='0.1.5',
+    version='0.1.6',
     description='lever jwt implementation',
     license='MIT',
     packages=['lever_jwt'],

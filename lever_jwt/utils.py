@@ -12,7 +12,7 @@ def authenticate(session=None):
     :param session: a reference to redis db
     :return:
     """
-    def decorator_function(f):
+    def decorator_function(f, *args, **kwargs):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             response_object = {
@@ -32,7 +32,9 @@ def authenticate(session=None):
                 if session_data is None:
                     response_object["message"] = "Authentication invalid"
                     return jsonify(response_object), 401
-                kwargs.update(dict(session_data=json.loads(session.get(resp.get('id')))))
+                kwargs.update(dict(
+                    session_data=json.loads(session.get(resp.get('id'))))
+                )
             kwargs.update(dict(resp=resp))
             return f(*args, **kwargs)
 
