@@ -28,11 +28,11 @@ def authenticate(session=None):
                 response_object['message'] = resp
                 return jsonify(response_object), 403
             if session:
-                session_data = json.loads(session.get(resp.get('id')))
+                session_data = session.get(resp.get('id'))
                 if session_data is None:
                     response_object["message"] = "Authentication invalid"
                     return jsonify(response_object), 401
-                kwargs.update(dict(session_data=session_data))
+                kwargs.update(dict(session_data=json.loads(session.get(resp.get('id')))))
             kwargs.update(dict(resp=resp))
             return f(*args, **kwargs)
 
