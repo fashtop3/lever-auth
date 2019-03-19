@@ -5,16 +5,16 @@ from flask import request, jsonify
 from .lever_jwt import jwt_decode_auth_token
 
 
-def authenticate(session=None):
+def authenticate(session=None, **kwargs):
     """
-
     :param f:
     :param session: a reference to redis db
     :return:
     """
-    def decorator_function(f, *args, **kwargs):
+
+    def decorator(f):
         @wraps(f)
-        def decorated_function(*args, **kwargs):
+        def decorated_view(*args, **kwargs):
             response_object = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
@@ -38,5 +38,5 @@ def authenticate(session=None):
             kwargs.update(dict(resp=resp))
             return f(*args, **kwargs)
 
-        return decorated_function
-    return decorator_function
+        return decorated_view
+    return decorator
