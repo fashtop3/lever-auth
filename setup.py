@@ -16,7 +16,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        'pyjwt==1.5.3',
+        'pyjwt==2.4.0',
         'flask',
     ]
 )
